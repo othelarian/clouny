@@ -8,8 +8,10 @@ It's another attempt to create a [quine app](https://en.wikipedia.org/wiki/Quine
 
 ## !! STILL IN PROGRESS !!
 
-What's the idea right now:
+What's on the grill right now:
 
+- writing the wiki
+- working on editions.js script to add some functionnality
 - having a basic ui to make the base version truly working
 - adding a textarea to be able to handle a slug
 - working on the server
@@ -28,7 +30,7 @@ Multiple editions:
 
 So right now it's barely working. What I already done:
 
-- the generator function, working both on node and browser, so usable both side
+- the generator function, working both on node and browser
 - the build and the clean scripts
 - the html base
 

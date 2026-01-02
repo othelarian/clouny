@@ -1,14 +1,6 @@
+// the generator function, responsible of taking all the app elements and turn
+// them into a string, ready to be put in a file
 export function generator(outHtml, coreScript, style, settings, scripts, slugs) {
-  outHtml = outHtml.replace('{{coreScript}}', coreScript);
-  outHtml = outHtml.replace('{{style}}', style);
-  outHtml = outHtml.replace('{{settings}}', settings);
-  let scriptsOut = '';
-  for (const script of scripts) {
-    //
-    // TODO: scripts
-    //
-  }
-  outHtml = outHtml.replace('{{scripts}}', scriptsOut);
   let slugsOut = '';
   for (const slug of slugs) {
     //
@@ -16,5 +8,17 @@ export function generator(outHtml, coreScript, style, settings, scripts, slugs) 
     //
   }
   outHtml = outHtml.replace('{{slugs}}', slugsOut);
+  let scriptsOut = '';
+  for (const script of scripts) {
+    //
+    // TODO: scripts
+    //
+  }
+  outHtml = outHtml.replace('{{scripts}}', scriptsOut);
+  outHtml = outHtml.replace('{{settings}}', JSON.stringify(settings));
+  outHtml = outHtml.replace('{{style}}', style);
+  // coreScript must be place at the end because otherwise the previous replace
+  // will modify coreScript and not the base
+  outHtml = outHtml.replace('{{coreScript}}', coreScript);
   return outHtml;
 }

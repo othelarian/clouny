@@ -20,9 +20,11 @@ async function checkTimes(srcFiles, outFile) {
 }
 
 // Build function
-export async function build(edition = '', forcing = false) {
+export async function build(edition = '', forcing = false, prod = false) {
   // Setup options
   const forced = (forcing)? true : checkArg('force', 'f');
+  prod = (prod)? true : checkArg('prod', 'p');
+  if (process.env.NODE_ENV == 'production') { prod = true; }
   // Get the edition
   if (edition == '') { // if build script called from another script
     const [isEditionOpt, argEdition] = checkArg('edition', 'e', true);
@@ -33,7 +35,12 @@ export async function build(edition = '', forcing = false) {
   // Get the sources and outfile
   try {
     const {srcFiles, srcScript, style, srcHtml} = getSources(edition);
-    const outFile = getOutfile(edition);
+    let outFile = getOutfile(edition);
+    // If prod, then add the version
+    if (prod) {
+      console.log(`prod version: ${packageJson.version}`);
+      outFile = outFile.replace('.', `_${packageJson.version}.`);
+    }
     // Check if src files are newer than the last build
     if (
       !forced && fs.existsSync(outFile)

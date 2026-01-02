@@ -19,7 +19,7 @@ export const buildDir = 'builds';
 export const defEdition = 'minimal';
 
 // base files needed for every edition of Clouny
-let srcFiles = ['src/base.html', 'src/generator.js'];
+let srcFiles = ['src/base.html', 'src/clouny.js', 'src/generator.js'];
 let srcAdds = null;
 let srcScript = null;
 let style = '';
@@ -30,12 +30,13 @@ let outFile = '';
 const editionsList = {
   'minimal': {
     desc: 'This is the minimal usable version of Clouny',
-    adds: ['src/script.js'],
-    script: 'src/script.js',
-    style: 'body{background:pink;}',
+    adds: ['src/script_minimal.js'],
+    script: 'src/script_minimal.js',
+    style: 'body{text-align:center;} svg.initiator{display:none;}',
     out: path.resolve(buildDir, 'minimal.html')
   },
   'nanochoo': {
+    desc: 'dev purpose',
     adds: [''],
   }
   //
