@@ -2,6 +2,6 @@
 
 A list of things to do and I don't want to forget:
 
-- add version when node production
+- rewrite the dl method on Clouny
 - github cicd
 

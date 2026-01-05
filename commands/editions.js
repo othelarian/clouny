@@ -22,7 +22,7 @@ export const defEdition = 'minimal';
 let srcFiles = ['src/base.html', 'src/clouny.js', 'src/generator.js'];
 let srcAdds = null;
 let srcScript = null;
-let style = '';
+let styles = [];
 const srcHtml = 'src/base.html';
 let outFile = '';
 
@@ -30,18 +30,47 @@ let outFile = '';
 const editionsList = {
   'minimal': {
     desc: 'This is the minimal usable version of Clouny',
+    // sources (mandatory)
     adds: ['src/script_minimal.js'],
-    script: 'src/script_minimal.js',
-    style: 'body{text-align:center;} svg.initiator{display:none;}',
+    coreScript: 'src/script_minimal.js',
+    styles: [
+      {
+        name: 'base',
+        content: 'body{text-align:center;} svg.initiator{display:none;} .view.hide{display:none;}'
+      }
+    ],
+    // content
+    scripts: [
+      {
+        name: 'view_minimal',
+        path: 'scripts/view_minimal.js'
+      }
+    ],
+    // out file
     out: path.resolve(buildDir, 'minimal.html')
   },
+  //
   'nanochoo': {
     desc: 'dev purpose',
     adds: [''],
+    //settings
   }
   //
   // TODO: for next edition, if style is in file, don't forget to add it to
   // srcAdds
+  //
+  // template
+  //desc
+  // sources
+  //adds
+  //script
+  //styles
+  // content
+  //slugs
+  //scripts
+  //settings
+  // out file
+  //out: path.resolve()
   //
 };
 
@@ -52,14 +81,26 @@ export function getSources(edition) {
     const selEdition = editionsList[edition];
     let sources = {
       srcFiles: srcFiles.concat(selEdition.adds),
-      srcScript: selEdition.script,
-      style: selEdition.style,
+      srcScript: selEdition.coreScript,
+      styles: selEdition.styles,
       srcHtml: srcHtml
     };
-    //
-    // TODO: if slugs or scripts are defined for an edition, add them
-    //
     return sources;
+  } else { throw 'Error: edition selected not found in the list'; }
+}
+
+// function to get dedicated content from editions, ie. all the optional parts
+export function getContent(edition) {
+  if (Object.keys(editionsList).find(elt => elt == edition) != undefined) {
+    const selEdition = editionsList[edition];
+    function findContent(key, def) {
+      return (selEdition.hasOwnProperty(key))? selEdition[key] : def;
+    }
+    return {
+      slugs: findContent('slugs', []),
+      scripts: findContent('scripts', []),
+      settings: findContent('settings', {})
+    };
   } else { throw 'Error: edition selected not found in the list'; }
 }
 

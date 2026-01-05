@@ -5,7 +5,9 @@ import path from 'path';
 
 import {generator} from '../src/generator.js';
 import {checkArg, isMainScript} from './utils.js';
-import {buildDir, defEdition, getSources, getOutfile} from './editions.js';
+import {
+  buildDir, defEdition, getContent, getOutfile, getSources
+} from './editions.js';
 
 // Get info from package.json
 const packageJson = JSON.parse(fs.readFileSync('package.json', 'utf8'));
@@ -34,7 +36,16 @@ export async function build(edition = '', forcing = false, prod = false) {
   console.log(`Building edition: ${edition}`);
   // Get the sources and outfile
   try {
-    const {srcFiles, srcScript, style, srcHtml} = getSources(edition);
+    const {srcFiles, srcScript, styles, srcHtml} = getSources(edition);
+    let {slugs, scripts, settings} = getContent(edition);
+    scripts = scripts.map(elt => {
+      elt.content = fs.readFileSync(elt.path, 'utf8');
+      return elt;
+    });
+    //
+    // TODO: do the same for the slugs
+    //
+    //
     let outFile = getOutfile(edition);
     // If prod, then add the version
     if (prod) {
@@ -76,10 +87,17 @@ export async function build(edition = '', forcing = false, prod = false) {
       // move the result into the generator, and save it
       const coreScript = new TextDecoder()
         .decode(result.outputFiles[0].contents);
-      const output = generator(htmlCore, coreScript, style, {}, [], []);
+      const output = generator(
+        htmlCore,
+        coreScript,
+        styles,
+        settings,
+        scripts,
+        slugs
+      );
       fs.writeFileSync(outFile, output);
       // show the size
-      const size = (Uint8Array.from(Buffer.from(output)).byteLength * 0.000977)
+      const size = (Uint8Array.from(Buffer.from(output)).byteLength * 0.0009766)
         .toFixed(3) + ' kilobytes';
       console.log(`Final size: ${size}`);
     });
